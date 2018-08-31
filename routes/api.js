@@ -7,8 +7,24 @@ const router = vertex.router();
 
 const validResources = ['message'];
 
-router.postHandler('/messages', (req, res) => {
-  console.log(req.body);
+router.post('/message', (req, res) => {
+  turbo
+    .create('message', req.body)
+    .then(data => {
+      res.json({
+        confirmation: 'success',
+        data: data
+      });
+      return;
+    })
+    .catch(err => {
+      console.log(err);
+      res.json({
+        confirmation: 'fail',
+        message: err.message
+      });
+      return;
+    });
 });
 
 router.get('/:resource', (req, res) => {
