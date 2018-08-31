@@ -7,6 +7,10 @@ const router = vertex.router();
 
 const validResources = ['message'];
 
+router.postHandler('/messages', (req, res) => {
+  console.log(req.body);
+});
+
 router.get('/:resource', (req, res) => {
   const { resource } = req.params;
   const { query } = req;
@@ -37,7 +41,7 @@ router.get('/:resource', (req, res) => {
     });
 });
 
-router.get('/message/me', (req, res) => {
+router.get('/message/me', function(req, res) {
   const resource = 'message';
   const { query } = req;
 
@@ -52,15 +56,16 @@ router.get('/message/me', (req, res) => {
   };
 
   turbo
-    .fetch((resource, first), () => {
-      data.forEach((mess, i) => {
-        messages.push(mess);
+    .fetch(resource, first)
+    .then(data => {
+      data.forEach((mes, i) => {
+        messages.push(mes);
       });
       return turbo.fetch(resource, second);
     })
     .then((data, i) => {
-      data.forEach((mess, i) => {
-        messages.push(mess);
+      data.forEach((mes, i) => {
+        messages.push(mes);
       });
       res.json({
         confirmation: 'success',
@@ -68,6 +73,7 @@ router.get('/message/me', (req, res) => {
       });
     })
     .catch(err => {
+      console.log(err);
       res.json({
         confirmation: 'fail',
         message: err.message
