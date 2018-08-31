@@ -52,7 +52,7 @@ router.get('/message/me', (req, res) => {
   };
 
   turbo
-    .fetch(resource, first)
+    .fetch((resource, first), () => {
       data.forEach((mess, i) => {
         messages.push(mess);
       });
